@@ -91,12 +91,7 @@ class KubernetesLookup(object):
         for arg in AUTH_ARG_SPEC:
             self.connection[arg] = kwargs.get(arg)
 
-        try:
-            self.helper.set_client_config(**self.connection)
-        except Exception as exc:
-            raise Exception(
-                "Client authentication failed: {0}".format(exc.message)
-            )
+        self.helper.set_client_config(**self.connection)
 
         if self.name:
             return self.get_object()
