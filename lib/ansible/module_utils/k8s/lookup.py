@@ -63,18 +63,6 @@ class KubernetesLookup(object):
         self.helper = None
         self.connection = {}
 
-    def authenticate(self):
-        try:
-            auth_options = {}
-            auth_args = ('host', 'api_key', 'kubeconfig', 'context', 'username', 'password',
-                         'cert_file', 'key_file', 'ssl_ca_cert', 'verify_ssl')
-            for key, value in iteritems(self.params):
-                if key in auth_args and value is not None:
-                    auth_options[key] = value
-            self.helper.set_client_config(**auth_options)
-        except KubernetesException as e:
-            self.fail_json(msg='Error loading config', error=str(e))
-
     def run(self, terms, variables=None, **kwargs):
         self.kind = kwargs.get('kind')
         self.name = kwargs.get('resource_name')
@@ -104,7 +92,7 @@ class KubernetesLookup(object):
                         'cert_file', 'key_file', 'ssl_ca_cert', 'verify_ssl')
 
         for arg in AUTH_ARG_SPEC:
-            if key in auth_args and kwargs.get(arg) is not None:
+            if arg in auth_args and kwargs.get(arg) is not None:
                 self.connection[arg] = kwargs.get(arg)
 
         try:
